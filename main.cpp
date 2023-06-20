@@ -4,13 +4,16 @@
 #include "src/Tuple.h"
 #include "src/Any.h"
 #include "src/Variant.h"
+#include "src/Function.h"
 void test_Tuple();
 void test_Any();
 void test_Variant();
+void test_Function();
 int main() {
     // test_Tuple();
     // test_Any();
-    test_Variant();
+    // test_Variant();
+    test_Function();
 }
 
 void test_Tuple() {
@@ -51,4 +54,28 @@ void test_Variant() {
     for (auto s : x.get<1>()) {
         std::cout << s << std::endl;
     }
+}
+ void foo(int n, Function<void()>& call_back) {
+    int sum = 0;
+    for (int i = 1; i <= n; i++)sum += i;
+    call_back = [=]() {
+        std::cout << "sum  from 1"<<" to "<<n <<" is " << sum << "\n";
+    };
+ }
+void test_Function(){
+   srand(time(nullptr));
+    std::vector<Function<void()>>func(3);
+    for (auto &f:func) {
+        foo(rand(), f);
+    }
+    Function<int(int)> fib = [&](int n) {
+        if (n == 0 || n == 1)return 1;
+        return fib(n - 1) + fib(n - 2);
+    };
+    for (int i = 0; i < 10; i++)std::cout << fib(i) << " ";
+    std::cout << "\n";
+    for (auto& f : func) {
+        f();
+    }
+
 }
