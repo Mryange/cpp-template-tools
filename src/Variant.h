@@ -22,7 +22,7 @@ struct Variant {
     template <typename T>
     Variant(T &&rhs) {
         type = Position<0, T, Ts...>::pos;
-        *reinterpret_cast<T *>(data) = forward<T>(rhs);
+        *reinterpret_cast<T *>(data) = std::forward<T>(rhs);
     }
     // 同类型的拷贝
     void operator=(const Variant<Ts...> &rhs) {
@@ -58,4 +58,23 @@ struct Variant {
             destroy_func[type](data);
         }
     }
+
+    template <typename Func, typename Var, typename realtype>
+    static auto _Visit_helper(Func &&func, Var &var) {
+        return func(std::forward<Var>(var).template get<realtype>());
+    }
+    template <typename Func>
+    auto Visit(Func &&func) {
+        using arg0 = typename Type_element<0, Ts...>::Type;
+        using Ret = typename get_ret_type<Func(arg0)>::type;
+        using Vartype = Variant<Ts...>;
+        using fn_type = Ret (*)(Func &&, Vartype &);
+        constexpr static fn_type table[] = {_Visit_helper<Func, Vartype, Ts>...};
+        return table[type](std::forward<Func>(func), *this);
+    }
 };
+
+template <typename Func, typename Vs>
+auto Visit(Func &&func, Vs &&var) {
+    return std::forward<Vs>(var).Visit(std::forward<Func>(func));
+}

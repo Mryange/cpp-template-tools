@@ -11,12 +11,33 @@ void test_Any();
 void test_Variant();
 void test_Function();
 void test_Function_ref();
+void test_Visit();
 int main() {
     // test_Tuple();
     // test_Any();
     // test_Variant();
     // test_Function();
-    test_Function_ref();
+    // test_Function_ref();
+    test_Visit();
+}
+
+void test_Visit() {
+    auto f = [](auto &&v) {
+        using T = std::decay_t<decltype(v)>;
+        if constexpr (std::is_same_v<T, int>) {
+            std::cout << "int\n";
+        } else if constexpr (std::is_same_v<T, char>) {
+            std::cout << "char\n";
+        } else if constexpr (std::is_same_v<T, std::vector<int>>) {
+            std::cout << "vec\n";
+        } else {
+            std::cout << "???\n";
+        }
+    };
+    using var_t = Variant<int, char, std::vector<int>>;
+    Visit(f, var_t{1});
+    Visit(f, var_t{'a'});
+    Visit(f, var_t{std::vector<int>{1, 2, 3, 4, 5}});
 }
 
 void test_Tuple() {

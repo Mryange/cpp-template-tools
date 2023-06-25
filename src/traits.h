@@ -31,3 +31,10 @@ template <typename T, typename... Ts>
 struct Type_element<0, T, Ts...> {
     using Type = T;
 };
+
+template <typename Fn, typename... Args>
+struct get_ret_type;
+template <typename Fn, typename... Args>
+struct get_ret_type<Fn(Args...)> {
+    using type = decltype(std::declval<Fn>()(std::declval<Args>()...));
+};
