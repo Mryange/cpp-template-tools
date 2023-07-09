@@ -13,12 +13,27 @@ void test_Function();
 void test_Function_ref();
 void test_Visit();
 int main() {
-    // test_Tuple();
-    // test_Any();
-    // test_Variant();
-    // test_Function();
-    // test_Function_ref();
-    test_Visit();
+    // using var_t = Variant<int, char, std::string>;
+    // auto f = [](auto &&v) {
+    //     // 获得v的类型
+    //     using T = std::decay_t<decltype(v)>;
+    //     // 根据不同的类型，执行不同的操作
+    //     if constexpr (std::is_same_v<T, int>) {
+    //         std::cout << "int : " << v << "\n";
+    //     }
+    //     if constexpr (std::is_same_v<T, char>) {
+    //         std::cout << "char : " << v << "\n";
+    //     }
+    //     if constexpr (std::is_same_v<T, std::string>) {
+    //         std::cout << "string : " << v << "\n";
+    //     }
+    // };
+    // var_t v{114};
+    // Visit(f, v);
+    // v =std::string{ "514"};
+    // Visit(f, v);
+    // Visit(f, var_t{'a'});
+    test_Function_ref();
 }
 
 void test_Visit() {
@@ -111,4 +126,8 @@ void test_Function_ref() {
     int cnt{0};
     foo([&]() { cnt += 114514; });
     std::cout << cnt << "\n";
+    Function_ref<void()> a = [](){std::cout<<"hello\n";};
+    auto b =a;
+    a();
+    b();
 }

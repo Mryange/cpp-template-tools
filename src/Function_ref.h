@@ -14,10 +14,16 @@ struct Function_ref<Ret(Args...)>{
     }
     Function_ref() = default;
     Function_ref(std::nullptr_t){};
-    template<typename Func>
-    Function_ref(Func && func){
-        callfn_withtype = call_fn<std::remove_reference_t<Func>>;
-        fnptr = reinterpret_cast<void*>(&func);
+    template <typename Func>
+    Function_ref(Func &&func) {
+        using type = std::remove_reference_t<Func>;
+        if constexpr (std::is_same_v<type, Function_ref<Ret(Args...)>>) {
+            this->fnptr = func.fnptr;
+            this->callfn_withtype = func.callfn_withtype;
+        } else {
+            callfn_withtype = call_fn<type>;
+            fnptr = reinterpret_cast<void *>(&func);
+        }
     }
     Ret operator()(Args ... args) const {
         return callfn_withtype(fnptr,std::forward<Args>(args)...);
