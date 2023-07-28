@@ -38,3 +38,14 @@ template <typename Fn, typename... Args>
 struct get_ret_type<Fn(Args...)> {
     using type = decltype(std::declval<Fn>()(std::declval<Args>()...));
 };
+template <typename T, typename... Ts>
+struct is_all_trivial {
+    static constexpr bool value = std::is_trivial_v<T> && is_all_trivial<Ts...>::value;
+};
+template <typename T>
+struct is_all_trivial<T> {
+    static constexpr bool value = std::is_trivial_v<T>;
+};
+
+template <typename... Ts>
+constexpr bool is_all_trivial_v = is_all_trivial<Ts...>::value;
