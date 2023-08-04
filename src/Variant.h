@@ -1,3 +1,4 @@
+#pragma once
 #include "traits.h"
 /// TODO: 支持数组类型
 // 创建析构函数

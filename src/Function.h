@@ -1,3 +1,4 @@
+#pragma once
 #include <utility>
 template <typename Ret, typename... Args>
 struct Function;

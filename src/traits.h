@@ -1,4 +1,5 @@
 
+#pragma once
 #include <type_traits>
 
 /// TODO: 不要使用std的内容，全部手写
@@ -49,3 +50,25 @@ struct is_all_trivial<T> {
 
 template <typename... Ts>
 constexpr bool is_all_trivial_v = is_all_trivial<Ts...>::value;
+
+
+template<int ...data>
+struct Int_List{
+    template<int N>
+    using push_back = Int_List<data...,N>;
+};
+
+template<int L,int R,typename = void> 
+struct _Make_Int_List{
+    using L_list = typename _Make_Int_List<L,R - 1>::ret;
+    using ret = typename L_list::template push_back<R>;
+};
+
+template<int L,int R>
+struct _Make_Int_List<L,R,typename std::enable_if_t<L == R,void>>{
+   using ret = Int_List<L>;
+};
+
+
+template<int L,int R>
+using Make_Int_List = typename _Make_Int_List<L,R>::ret;

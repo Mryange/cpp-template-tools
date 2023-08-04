@@ -6,35 +6,27 @@
 #include "src/Variant.h"
 #include "src/Function.h"
 #include "src/Function_ref.h"
+#include "src/Bind.h"
 void test_Tuple();
 void test_Any();
 void test_Variant();
 void test_Function();
 void test_Function_ref();
 void test_Visit();
-int main() {
-    // using var_t = Variant<int, char, std::string>;
-    // auto f = [](auto &&v) {
-    //     // 获得v的类型
-    //     using T = std::decay_t<decltype(v)>;
-    //     // 根据不同的类型，执行不同的操作
-    //     if constexpr (std::is_same_v<T, int>) {
-    //         std::cout << "int : " << v << "\n";
-    //     }
-    //     if constexpr (std::is_same_v<T, char>) {
-    //         std::cout << "char : " << v << "\n";
-    //     }
-    //     if constexpr (std::is_same_v<T, std::string>) {
-    //         std::cout << "string : " << v << "\n";
-    //     }
-    // };
-    // var_t v{114};
-    // Visit(f, v);
-    // v =std::string{ "514"};
-    // Visit(f, v);
-    // Visit(f, var_t{'a'});
-    test_Function_ref();
+
+
+using xxxWrapper = std::function<int(int, int)>;
+int foo(int st, int ed, int p) {
+    int sum = 0;
+    for (int i = st; i <= ed; i += p) {
+        sum += i;
+    }
+    return sum;
 }
+int main() {
+    auto tup = Tuple<int,_MyPh<0>,int,_MyPh<1>>(114,_0,514,_1);
+}
+
 
 void test_Visit() {
     auto f = [](auto &&v) {
