@@ -14,7 +14,6 @@ void test_Function();
 void test_Function_ref();
 void test_Visit();
 
-
 using xxxWrapper = std::function<int(int, int)>;
 int foo(int st, int ed, int p) {
     int sum = 0;
@@ -24,9 +23,9 @@ int foo(int st, int ed, int p) {
     return sum;
 }
 int main() {
-    auto tup = Tuple<int,_MyPh<0>,int,_MyPh<1>>(114,_0,514,_1);
+    auto f = Bind(foo, _0, _1, _2);
+    std::cout << f(1, 10, 2) << "\n";
 }
-
 
 void test_Visit() {
     auto f = [](auto &&v) {
@@ -118,8 +117,8 @@ void test_Function_ref() {
     int cnt{0};
     foo([&]() { cnt += 114514; });
     std::cout << cnt << "\n";
-    Function_ref<void()> a = [](){std::cout<<"hello\n";};
-    auto b =a;
+    Function_ref<void()> a = []() { std::cout << "hello\n"; };
+    auto b = a;
     a();
     b();
 }
