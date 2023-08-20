@@ -9,3 +9,5 @@ varint
 any
 function
 function_ref
+visit
+bind
